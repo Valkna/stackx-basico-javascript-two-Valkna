@@ -1,47 +1,84 @@
-// Array para armazenar as mensagens
+/**
+ * Chatlab - Conceitos de array/object em Javascript.
+ *
+ * Implemente as funções a partir daqui.
+ */
+
+// Exemplo: function minhaFuncao() { ... }
+
+// --------------------------------
+// Não remover estas linhas
+// --------------------------------
+
 let listaMensagens = [];
+let mensFinal = '';
 
-// Função para adicionar uma nova mensagem ao array
 function adicionarMensagem(apelido, mensagem) {
-    listaMensagens.push({
-        apelido: apelido,
-        mensagem: mensagem
-    });
+  const mensagemNova = {
+    apelido: apelido,
+    mensagem: mensagem
+  };
+
+  listaMensagens.push(mensagemNova);
 }
 
-// Função para formatar as mensagens
 function formatarMensagens() {
-    let mensagensFormatadas = '';
-    for (let i = 0; i < listaMensagens.length; i++) {
-        const mensagem = listaMensagens[i];
-        const mensagemFormatada = `
-            <div class="chat-message">
-                <span class="chat-message-apelido">${mensagem.apelido}</span>
-                <span class="chat-message-item">${mensagem.mensagem}</span>
-            </div>
-        `;
-        mensagensFormatadas += mensagemFormatada;
-    }
-    return mensagensFormatadas;
+  mensFinal = '';
+
+  for (let i = 0; i < listaMensagens.length; i++) {
+    let mensagem = listaMensagens[i];
+
+    let mensagemFinalizada =
+    `
+    <div class="chat-message">
+      <span class="chat-message-apelido">${mensagem.apelido}</span>
+      <span class="chat-message-item">${mensagem.mensagem}</span>
+    </div>
+  `;
+
+    mensFinal += mensagemFinalizada.trim();
+  }
+
+  console.log(mensFinal)
+  return mensFinal;
 }
 
-// Função para atualizar o conteúdo da div #chat-messages
+function login() {
+  const buscarApelido = document.getElementById("buscarApelido");
+  const chatContainer = document.getElementById("chat-container");
+  buscarApelido.classList.add("hide");
+  chatContainer.classList.remove("hide");
+}
+
 function atualizarHTML() {
-    const chatMessagesDiv = document.getElementById('chat-messages');
-    chatMessagesDiv.innerHTML = formatarMensagens();
+  const container = document.getElementById("chat-messages");
+  if (container) {
+    container.innerHTML = mensFinal
+  } 
 }
 
-// Função para lidar com o clique no botão #message-commit
 function commitMessageClickHandler() {
-    const inputMensagem = document.getElementById('message-input');
-    const mensagem = inputMensagem.value.trim();
-    if (mensagem !== '') {
-        adicionarMensagem("Usuário: ", mensagem);
-        inputMensagem.value = '';
-        atualizarHTML();
-    }
+  const textoMensagem = document.getElementById("message-input");
+  const textoApelido = document.getElementById("message-nickname");
+  adicionarMensagem(textoApelido?.value, textoMensagem?.value);
+  formatarMensagens();
+  atualizarHTML();
+  textoMensagem.value = '';
 }
 
-// Adicionar um ouvinte de evento para o clique no botão #message-commit
-const btnMessageCommit = document.getElementById('message-commit');
-btnMessageCommit.addEventListener('click', commitMessageClickHandler);
+if (typeof module !== 'undefined' && module.exports) {
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const botaoEnviar = document.getElementById("message-commit");
+    botaoEnviar.addEventListener("click", commitMessageClickHandler);
+  });
+}
+
+module.exports = {
+  listaMensagens,
+  adicionarMensagem,
+  formatarMensagens,
+  atualizarHTML,
+  commitMessageClickHandler,
+};
+// --------------------------------
